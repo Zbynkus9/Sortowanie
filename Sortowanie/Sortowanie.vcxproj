@@ -127,11 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="datasetmake.cpp" />
-    <ClCompile Include="introsort.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="mergesort.cpp" />
-    <ClCompile Include="quicksort.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="datasetmake.h" />

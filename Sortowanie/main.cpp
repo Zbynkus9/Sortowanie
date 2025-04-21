@@ -15,21 +15,18 @@ int main() {
 	srand(time(NULL));
 
 	// Rozmiary tablic do posortowania
-	const int tabSizes[] = { 100, 500, 1000, 5000, 10000, 50000, 100000, 500000, 1000000 };
-
-	const int tabSizesAmount = sizeof(tabSizes) / sizeof(tabSizes[0]); // Obliczenie liczby rozmiarów tablic
-
+	//const int tabSizes[] = { 100, 500, 1000, 5000, 10000, 50000, 100000, 500000, 1000000 };
+	const int tabSizes[] = { 100, 500 };
+	const int tabSizesAmount = sizeof(tabSizes) / sizeof(tabSizes[0]); // Obliczenie liczby rozmiarow tablic
 	int tabSize = tabSizes[0]; // Ustawienie domyœlnego rozmiaru tablicy
 
-	// Liczba iteracji dla ka¿dego rozmiaru
-	const int iterations = 1;
+	// Liczba iteracji dla kazdego rozmiaru
+	const int iterations = 5;
 
-	// Procent posortowania dla tablic czêœciowo posortowanych
+	// Procent posortowania dla tablic czeœciowo posortowanych
 	const double percentages[] = { 0.25, 0.5, 0.75, 0.95, 0.99, 0.997 };
-
-	const int percentagesAmout = sizeof(percentages) / sizeof(percentages[0]); // Obliczenie liczby procentów
-
-	double percent = percentages[0]; // Ustawienie domyœlnego procentu dla tablic czêœciowo posortowanych
+	const int percentagesAmout = sizeof(percentages) / sizeof(percentages[0]); // Obliczenie liczby procentow
+	double percent = percentages[0]; // Ustawienie domyœlnego procentu dla tablic czeœciowo posortowanych
 
 	// Typy tablic do testowania
 	const string arrayTypes[] = {
@@ -37,31 +34,30 @@ int main() {
 		"reversed",
 		"partially_sorted"
 	};
-
-	const int arrayTypesAmount = sizeof(arrayTypes) / sizeof(arrayTypes[0]); // Obliczenie liczby typów tablic
-
+	const int arrayTypesAmount = sizeof(arrayTypes) / sizeof(arrayTypes[0]); // Obliczenie liczby typow tablic
 	string arrayType = arrayTypes[0]; // Ustawienie domyœlnego typu tablicy
 
-	// Pliki do zapisu wyników
+	// Pliki do zapisu wynikow
 	const string sortingResultsFiles[] = {
 		"mergesort_results.csv",
 		"quicksort_results.csv",
 		"introsort_results.csv"
 	};
+	const int sortingResultsFilesAmount = sizeof(sortingResultsFiles) / sizeof(sortingResultsFiles[0]); // Obliczenie liczby plikow
 
-	const int sortingResultsFilesAmount = sizeof(sortingResultsFiles) / sizeof(sortingResultsFiles[0]); // Obliczenie liczby plików
-
-	long long sortTimes[tabSizesAmount + arrayTypesAmount + percentagesAmout - 1][iterations];
-	// cykl dla rozmiarów [random, reversed, partialy_sorted_1, ... partialy_sorted_n] | [iteracje]
+	const int offset = (arrayTypesAmount + percentagesAmout - 1); // Obliczenie offsetu dla tablicy czasow
+	const int timeTabSize = tabSizesAmount * offset;
+	long long sortTimes[timeTabSize][iterations];
+	// cykl dla rozmiarow [random, reversed, partialy_sorted_1, ... partialy_sorted_n] | [iteracje]
 
 	ofstream file;
 
 	for (int i = 0; i < sortingResultsFilesAmount; i++) {
 
-		file.open(sortingResultsFiles[i], ios::app);
+		file.open(sortingResultsFiles[i]);
 
 		if (!file.is_open()) {
-			cerr << "Nie mo¿na otworzyæ pliku: " << sortingResultsFiles[i] << endl;
+			cerr << "Nie mozna otworzyc pliku: " << sortingResultsFiles[i] << endl;
 			return 1;
 		}
 
@@ -74,6 +70,7 @@ int main() {
 			file << ",";
 		}
 		file << endl;
+		cout << "\nNaglowek napisany dla pliku: " << sortingResultsFiles[i] << endl;
 
 		switch (i) {
 		case 0: // Mergesort
@@ -88,11 +85,14 @@ int main() {
 						arrayType = arrayTypes[k];
 						for (int l = 0; l < iterations; l++) {
 							generateRandomArray(arr, tabSize);
+							cout << endl;
 							auto start = chrono::high_resolution_clock::now();
 							mergeSort(arr, 0, tabSize - 1);
 							auto end = chrono::high_resolution_clock::now();
-							sortTimes[(j * (arrayTypesAmount + percentagesAmout - 1)) + k][l] = chrono::duration_cast<chrono::microseconds>(end - start).count();
+							sortTimes[(j * offset) + k][l] = chrono::duration_cast<chrono::microseconds>(end - start).count();
 						}
+						cout << "Tablica " << arrayType << " o rozmiarze " << tabSize << " posortowana." << endl;
+						cout << endl;
 						break;
 
 					case 1: // Reversed
@@ -102,8 +102,9 @@ int main() {
 							auto start = chrono::high_resolution_clock::now();
 							mergeSort(arr, 0, tabSize - 1);
 							auto end = chrono::high_resolution_clock::now();
-							sortTimes[(j * (arrayTypesAmount + percentagesAmout - 1)) + k][l] = chrono::duration_cast<chrono::microseconds>(end - start).count();
+							sortTimes[(j * offset) + k][l] = chrono::duration_cast<chrono::microseconds>(end - start).count();
 						}
+						cout << "Tablica " << arrayType << " o rozmiarze " << tabSize << " posortowana." << endl;
 						break;
 
 					case 2: // Partially sorted
@@ -115,19 +116,21 @@ int main() {
 								auto start = chrono::high_resolution_clock::now();
 								mergeSort(arr, 0, tabSize - 1);
 								auto end = chrono::high_resolution_clock::now();
-								sortTimes[(j * (arrayTypesAmount + percentagesAmout - 1)) + k + l][m] = chrono::duration_cast<chrono::microseconds>(end - start).count();
+								sortTimes[(j * offset) + k + l][m] = chrono::duration_cast<chrono::microseconds>(end - start).count();
 							}
+							cout << "Tablica " << arrayType << " o rozmiarze " << tabSize << " dla startowego % poukladania " << percent << " posortowana." << endl;
 						}
 						break;
 
 					default:
+						cout << "Nieznany typ tablicy" << endl;
 						break;
 
 					}
 				}
 
-				delete[] arr; // Zwolnienie pamiêci po tablicy
-
+				delete[] arr; // Zwolnienie pamieci po tablicy
+				cout << "Posortowano wszystkie tablice matoda: " << sortingResultsFiles[i] << endl;
 			}
 
 			break;
@@ -147,8 +150,9 @@ int main() {
 							auto start = chrono::high_resolution_clock::now();
 							quickSort(arr, 0, tabSize - 1);
 							auto end = chrono::high_resolution_clock::now();
-							sortTimes[(j * (arrayTypesAmount + percentagesAmout - 1)) + k][l] = chrono::duration_cast<chrono::microseconds>(end - start).count();
+							sortTimes[(j * offset) + k][l] = chrono::duration_cast<chrono::microseconds>(end - start).count();
 						}
+						cout << "Tablica " << arrayType << " o rozmiarze " << tabSize << " posortowana." << endl;
 						break;
 
 					case 1: // Reversed
@@ -158,8 +162,9 @@ int main() {
 							auto start = chrono::high_resolution_clock::now();
 							quickSort(arr, 0, tabSize - 1);
 							auto end = chrono::high_resolution_clock::now();
-							sortTimes[(j * (arrayTypesAmount + percentagesAmout - 1)) + k][l] = chrono::duration_cast<chrono::microseconds>(end - start).count();
+							sortTimes[(j * offset) + k][l] = chrono::duration_cast<chrono::microseconds>(end - start).count();
 						}
+						cout << "Tablica " << arrayType << " o rozmiarze " << tabSize << " posortowana." << endl;
 						break;
 
 					case 2: // Partially sorted
@@ -171,8 +176,9 @@ int main() {
 								auto start = chrono::high_resolution_clock::now();
 								quickSort(arr, 0, tabSize - 1);
 								auto end = chrono::high_resolution_clock::now();
-								sortTimes[(j * (arrayTypesAmount + percentagesAmout - 1)) + k + l][m] = chrono::duration_cast<chrono::microseconds>(end - start).count();
+								sortTimes[(j * offset) + k + l][m] = chrono::duration_cast<chrono::microseconds>(end - start).count();
 							}
+							cout << "Tablica " << arrayType << " o rozmiarze " << tabSize << " dla startowego % poukladania " << percent << " posortowana." << endl;
 						}
 						break;
 
@@ -182,8 +188,8 @@ int main() {
 					}
 				}
 
-				delete[] arr; // Zwolnienie pamiêci po tablicy
-
+				delete[] arr; // Zwolnienie pamieci po tablicy
+				cout << "Posortowano wszystkie tablice matoda: " << sortingResultsFiles[i] << endl;
 			}
 
 			break;
@@ -201,10 +207,11 @@ int main() {
 						for (int l = 0; l < iterations; l++) {
 							generateRandomArray(arr, tabSize);
 							auto start = chrono::high_resolution_clock::now();
-							introsort(arr, 0, tabSize - 1);
+							introsort(arr, tabSize);
 							auto end = chrono::high_resolution_clock::now();
-							sortTimes[(j * (arrayTypesAmount + percentagesAmout - 1)) + k][l] = chrono::duration_cast<chrono::microseconds>(end - start).count();
+							sortTimes[(j * offset) + k][l] = chrono::duration_cast<chrono::microseconds>(end - start).count();
 						}
+						cout << "Tablica " << arrayType << " o rozmiarze " << tabSize << " posortowana." << endl;
 						break;
 
 					case 1: // Reversed
@@ -212,10 +219,11 @@ int main() {
 						for (int l = 0; l < iterations; l++) {
 							generateReverseSortedArray(arr, tabSize);
 							auto start = chrono::high_resolution_clock::now();
-							introsort(arr, 0, tabSize - 1);
+							introsort(arr, tabSize);
 							auto end = chrono::high_resolution_clock::now();
-							sortTimes[(j * (arrayTypesAmount + percentagesAmout - 1)) + k][l] = chrono::duration_cast<chrono::microseconds>(end - start).count();
+							sortTimes[(j * offset) + k][l] = chrono::duration_cast<chrono::microseconds>(end - start).count();
 						}
+						cout << "Tablica " << arrayType << " o rozmiarze " << tabSize << " posortowana." << endl;
 						break;
 
 					case 2: // Partially sorted
@@ -225,11 +233,14 @@ int main() {
 							for (int m = 0; m < iterations; m++) {
 								generatePartialySortedArray(arr, tabSize, percent);
 								auto start = chrono::high_resolution_clock::now();
-								introsort(arr, 0, tabSize - 1);
+								introsort(arr, tabSize);
 								auto end = chrono::high_resolution_clock::now();
-								sortTimes[(j * (arrayTypesAmount + percentagesAmout - 1)) + k + l][m] = chrono::duration_cast<chrono::microseconds>(end - start).count();
+								sortTimes[(j * offset) + k + l][m] = chrono::duration_cast<chrono::microseconds>(end - start).count();
 							}
+							cout << "Tablica " << arrayType << " o rozmiarze " << tabSize << " dla startowego % poukladania " << percent << " posortowana." << endl;
 						}
+						
+						
 						break;
 
 					default:
@@ -238,8 +249,8 @@ int main() {
 					}
 				}
 
-				delete[] arr; // Zwolnienie pamiêci po tablicy
-
+				delete[] arr; // Zwolnienie pamieci po tablicy
+				cout << "Posortowano wszystkie tablice matoda: " << sortingResultsFiles[i] << endl;
 			}
 
 			break;
@@ -249,20 +260,22 @@ int main() {
 
 		}
 
+		cout << "Zapisuje wyniki do pliku: " << sortingResultsFiles[i] << endl;
+
 		for (int j = 0; j < iterations; j++) {
 			for (int k = 0; k < tabSizesAmount; k++) {
-				file << j + 1 << "," << tabSizes[k] << "," << sortTimes[(k * (arrayTypesAmount + percentagesAmout - 1))][j] << "," << sortTimes[(k * (arrayTypesAmount + percentagesAmout - 1)) + 1][j];
+				file << j + 1 << "," << tabSizes[k] << "," << sortTimes[(k * offset)][j] << "," << sortTimes[(k * offset) + 1][j];
 				for (int l = 0; l < percentagesAmout; l++) {
-					file << "," << sortTimes[(k * (arrayTypesAmount + percentagesAmout - 1)) + 2 + l][j];
+					file << "," << sortTimes[(k * offset) + 2 + l][j];
 				}
-				file << endl;
+				file << ",";
+				cout << "Iteracja: " << j + 1 << ", Rozmiar tablicy: " << tabSizes[k] << ", Czas sortowania: " << sortTimes[(k * offset)][j] << endl;
 			}
-
+			file << endl;
 		}
 
 		file.close();
 
 	}
-
 	return 0;
 }
