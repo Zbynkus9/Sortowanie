@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include "datasetmake.h"
 
 template<typename T>

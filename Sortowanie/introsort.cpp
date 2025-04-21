@@ -1,3 +1,4 @@
+#include <cmath>
 #include "introsort.h"
 
 template<typename T>
@@ -102,7 +103,7 @@ void introsortUtil(T* arr, int left, int right, int depthLimit) {
 }
 
 template<typename T>
-void introsort(T* arr, int* begin, int* end) {
+void introsort(T* arr, int begin, int end) {
 	
 	int depthLimit = 2 * log(end - begin);
 
