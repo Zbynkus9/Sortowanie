@@ -15,13 +15,12 @@ int main() {
 	srand(time(NULL));
 
 	// Rozmiary tablic do posortowania
-	//const int tabSizes[] = { 100, 500, 1000, 5000, 10000, 50000, 100000, 500000, 1000000 };
-	const int tabSizes[] = { 100, 500 };
+	const int tabSizes[] = { 100, 500, 1000, 5000, 10000, 50000, 100000, 500000, 1000000 };
 	const int tabSizesAmount = sizeof(tabSizes) / sizeof(tabSizes[0]); // Obliczenie liczby rozmiarow tablic
 	int tabSize = tabSizes[0]; // Ustawienie domyœlnego rozmiaru tablicy
 
 	// Liczba iteracji dla kazdego rozmiaru
-	const int iterations = 5;
+	const int iterations = 100;
 
 	// Procent posortowania dla tablic czeœciowo posortowanych
 	const double percentages[] = { 0.25, 0.5, 0.75, 0.95, 0.99, 0.997 };
@@ -89,7 +88,7 @@ int main() {
 							auto start = chrono::high_resolution_clock::now();
 							mergeSort(arr, 0, tabSize - 1);
 							auto end = chrono::high_resolution_clock::now();
-							sortTimes[(j * offset) + k][l] = chrono::duration_cast<chrono::microseconds>(end - start).count();
+							sortTimes[(j * offset) + k][l] = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
 						}
 						cout << "Tablica " << arrayType << " o rozmiarze " << tabSize << " posortowana." << endl;
 						cout << endl;
@@ -102,7 +101,7 @@ int main() {
 							auto start = chrono::high_resolution_clock::now();
 							mergeSort(arr, 0, tabSize - 1);
 							auto end = chrono::high_resolution_clock::now();
-							sortTimes[(j * offset) + k][l] = chrono::duration_cast<chrono::microseconds>(end - start).count();
+							sortTimes[(j * offset) + k][l] = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
 						}
 						cout << "Tablica " << arrayType << " o rozmiarze " << tabSize << " posortowana." << endl;
 						break;
@@ -116,7 +115,7 @@ int main() {
 								auto start = chrono::high_resolution_clock::now();
 								mergeSort(arr, 0, tabSize - 1);
 								auto end = chrono::high_resolution_clock::now();
-								sortTimes[(j * offset) + k + l][m] = chrono::duration_cast<chrono::microseconds>(end - start).count();
+								sortTimes[(j * offset) + k + l][m] = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
 							}
 							cout << "Tablica " << arrayType << " o rozmiarze " << tabSize << " dla startowego % poukladania " << percent << " posortowana." << endl;
 						}
@@ -150,7 +149,7 @@ int main() {
 							auto start = chrono::high_resolution_clock::now();
 							quickSort(arr, 0, tabSize - 1);
 							auto end = chrono::high_resolution_clock::now();
-							sortTimes[(j * offset) + k][l] = chrono::duration_cast<chrono::microseconds>(end - start).count();
+							sortTimes[(j * offset) + k][l] = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
 						}
 						cout << "Tablica " << arrayType << " o rozmiarze " << tabSize << " posortowana." << endl;
 						break;
@@ -162,7 +161,7 @@ int main() {
 							auto start = chrono::high_resolution_clock::now();
 							quickSort(arr, 0, tabSize - 1);
 							auto end = chrono::high_resolution_clock::now();
-							sortTimes[(j * offset) + k][l] = chrono::duration_cast<chrono::microseconds>(end - start).count();
+							sortTimes[(j * offset) + k][l] = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
 						}
 						cout << "Tablica " << arrayType << " o rozmiarze " << tabSize << " posortowana." << endl;
 						break;
@@ -176,7 +175,7 @@ int main() {
 								auto start = chrono::high_resolution_clock::now();
 								quickSort(arr, 0, tabSize - 1);
 								auto end = chrono::high_resolution_clock::now();
-								sortTimes[(j * offset) + k + l][m] = chrono::duration_cast<chrono::microseconds>(end - start).count();
+								sortTimes[(j * offset) + k + l][m] = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
 							}
 							cout << "Tablica " << arrayType << " o rozmiarze " << tabSize << " dla startowego % poukladania " << percent << " posortowana." << endl;
 						}
@@ -209,7 +208,7 @@ int main() {
 							auto start = chrono::high_resolution_clock::now();
 							introsort(arr, tabSize);
 							auto end = chrono::high_resolution_clock::now();
-							sortTimes[(j * offset) + k][l] = chrono::duration_cast<chrono::microseconds>(end - start).count();
+							sortTimes[(j * offset) + k][l] = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
 						}
 						cout << "Tablica " << arrayType << " o rozmiarze " << tabSize << " posortowana." << endl;
 						break;
@@ -221,7 +220,7 @@ int main() {
 							auto start = chrono::high_resolution_clock::now();
 							introsort(arr, tabSize);
 							auto end = chrono::high_resolution_clock::now();
-							sortTimes[(j * offset) + k][l] = chrono::duration_cast<chrono::microseconds>(end - start).count();
+							sortTimes[(j * offset) + k][l] = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
 						}
 						cout << "Tablica " << arrayType << " o rozmiarze " << tabSize << " posortowana." << endl;
 						break;
@@ -235,7 +234,7 @@ int main() {
 								auto start = chrono::high_resolution_clock::now();
 								introsort(arr, tabSize);
 								auto end = chrono::high_resolution_clock::now();
-								sortTimes[(j * offset) + k + l][m] = chrono::duration_cast<chrono::microseconds>(end - start).count();
+								sortTimes[(j * offset) + k + l][m] = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
 							}
 							cout << "Tablica " << arrayType << " o rozmiarze " << tabSize << " dla startowego % poukladania " << percent << " posortowana." << endl;
 						}

@@ -3,7 +3,6 @@
 
 using namespace std;
 
-// swapper utility
 template<typename T>
 void swapper(T& a, T& b) {
     T temp = a;
@@ -11,7 +10,7 @@ void swapper(T& a, T& b) {
     b = temp;
 }
 
-// Insertion sort for small subarrays
+// Sortowanie przez wstawianie dla ma³ych podtablic
 template<typename T>
 void insertionSort(T* arr, int left, int right) {
     for (int i = left + 1; i <= right; i++) {
@@ -25,7 +24,7 @@ void insertionSort(T* arr, int left, int right) {
     }
 }
 
-// Heapify used in Heapsort
+// Funkcja pomocnicza do budowania kopca
 template<typename T>
 void heapify(T* arr, int n, int i, int offset) {
     int largest = i;
@@ -44,7 +43,6 @@ void heapify(T* arr, int n, int i, int offset) {
     }
 }
 
-// Heapsort implementation
 template<typename T>
 void heapsort(T* arr, int begin, int end) {
     int n = end - begin + 1;
@@ -57,7 +55,7 @@ void heapsort(T* arr, int begin, int end) {
     }
 }
 
-// Partition used in Quicksort
+// Funkcja partycjonuj¹ca dla Quicksort
 template<typename T>
 int partition(T* arr, int low, int high) {
     T pivot = arr[high];
@@ -72,7 +70,7 @@ int partition(T* arr, int low, int high) {
     return (i + 1);
 }
 
-// Recursive Introsort utility
+// Rekurencyjna funkcja Introsort
 template<typename T>
 void introsortUtil(T* arr, int begin, int end, int depthLimit) {
     int size = end - begin + 1;
@@ -92,7 +90,6 @@ void introsortUtil(T* arr, int begin, int end, int depthLimit) {
     introsortUtil(arr, pivot + 1, end, depthLimit - 1);
 }
 
-// Entry function
 template<typename T>
 void introsort(T* arr, int n) {
     int depthLimit = 2 * static_cast<int>(log(n));
